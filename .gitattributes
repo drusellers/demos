@@ -1,0 +1,14 @@
+# Disable text file normalization
+# http://davidlaing.com/2012/09/19/customise-your-gitattributes-to-become-a-git-ninja/
+* -text
+
+# Custom for Visual Studio
+*.sln merge=union
+*.csproj merge=union
+*.vbproj merge=union
+*.fsproj merge=union
+*.dbproj merge=union
+
+#diff settings
+*.cs diff=csharp
+*.sql diff=sql
