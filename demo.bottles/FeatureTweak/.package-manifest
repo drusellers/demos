@@ -1,0 +1,9 @@
+﻿<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Role>module</Role>
+  <Name>featuretweak</Name>
+  <assembly>FeatureTweak</assembly>
+  <Dependencies>
+    <Dependency>feature</Dependency>
+  </Dependencies>
+</package>

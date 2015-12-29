@@ -1,0 +1,9 @@
+﻿<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Role>application</Role>
+  <Name>product</Name>
+  <assembly>BaseProduct</assembly>
+  <ContentFileSet Include="*.as*x;*.htm;*.master;Content\*.*;*.config" Exclude="fubu-content\*.*;">
+    <DeepSearch>true</DeepSearch>
+  </ContentFileSet>
+</package>
