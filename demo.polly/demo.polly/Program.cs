@@ -16,7 +16,7 @@ namespace demo.polly
 
             //QUESTION: How can i setup RETRY and CIRCUIT BREAKER
             //          Retry 3 times, then break for 10 minutes
-            var p = Retry();
+            var policy = BreakCircuitAfterOneError();
 
 
 
@@ -24,7 +24,7 @@ namespace demo.polly
             for (int i = 0; i < 5; i++)
             {
                 //controller is called
-                var r = p.ExecuteAndCapture(() => DoSomething());
+                var r = policy.ExecuteAndCapture(() => DoSomething());
 
                 if (!(r.FinalException is BrokenCircuitException))
                 {
@@ -35,6 +35,8 @@ namespace demo.polly
                 Console.WriteLine("{0}:{1}", r.Outcome, r.FinalException.Message);
             }
 
+
+            Console.WriteLine("DONE");
             Console.ReadLine();
 
         }
@@ -46,7 +48,7 @@ namespace demo.polly
                .CircuitBreaker(1, TimeSpan.FromMinutes(60));
         }
 
-        private static Policy Retry()
+        private static Policy RetryPolicy()
         {
             var policyTimeSpans = new TimeSpan[5];
             policyTimeSpans[0] = TimeSpan.FromSeconds(0.5);
