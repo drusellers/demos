@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B2AB29AC-3BF6-4639-A1C7-3DEB1B20EFC9}</ProjectGuid>
+    <ProjectGuid>{84A76ADA-28CF-49C2-827C-08141A8ED96C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>demo.ioc</RootNamespace>
-    <AssemblyName>demo.ioc</AssemblyName>
+    <RootNamespace>demos.transactions</RootNamespace>
+    <AssemblyName>demos.transactions</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,45 +30,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Core">
-      <HintPath>..\packages\Castle.Core.3.3.0\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Windsor">
-      <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Advanced\01_TypeScanning\01_TypeScanning.cs" />
-    <Compile Include="Advanced\02_FactoryFunctions\01_FactoryFunctions.cs" />
-    <Compile Include="Advanced\03_Installers\01_Installers.cs" />
-    <Compile Include="Advanced\04_FeatureToggles\01_Toggles.cs" />
-    <Compile Include="Advanced\05_Metadata\01_Metadata.cs" />
-    <Compile Include="Basics\01_NonDI\TheService.cs" />
-    <Compile Include="Basics\02_WithDi\TheService.cs" />
-    <Compile Include="Basics\03_Manual\Manual.cs" />
-    <Compile Include="Basics\03_Manual\UsingWindsor.cs" />
-    <Compile Include="Basics\04_Tooling\01_Enumerations.cs" />
-    <Compile Include="Basics\04_Tooling\02_Installers.cs" />
-    <Compile Include="Basics\04_Tooling\03_TypeScanning.cs" />
-    <Compile Include="Basics\04_Tooling\04_Speed.cs" />
-    <Compile Include="Basics\05_Modeling\AnInventoryController.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
