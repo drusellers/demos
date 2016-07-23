@@ -23,7 +23,7 @@ namespace demo.tpl
             Task t;
             try
             {
-                t = DelayAsync(cancellationSource.Token);
+                t = TrackHighwaterMark(cancellationSource.Token);
 
                 t.Wait(2000);
             }
@@ -33,8 +33,43 @@ namespace demo.tpl
 
             }
 
+
             Console.WriteLine("Ended.");
             Console.ReadKey();
+        }
+
+        static int Concurrent;
+        static int HighWaterC = 0;
+
+        static async Task TrackHighwaterMark(CancellationToken token)
+        {
+            var tasks = new List<Task>();
+
+            foreach (var i in Enumerable.Range(0,1000))
+            {
+                var t = Task.Run(() =>
+                {
+                    Interlocked.Increment(ref Concurrent);
+
+
+                    if (Concurrent > HighWaterC)
+                    {
+                        Interlocked.CompareExchange(ref HighWaterC, Concurrent, HighWaterC);
+
+                    }
+
+                    Console.WriteLine(i);
+                    Thread.Sleep(100);
+
+                    Interlocked.Decrement(ref Concurrent);
+                });
+
+                tasks.Add(t);
+            }
+
+            Task.WaitAll(tasks.ToArray());
+
+            Console.WriteLine($"Concurrent:{Concurrent} - HighWater: {HighWaterC}");
         }
 
         static async Task DelayAsync(CancellationToken token)
