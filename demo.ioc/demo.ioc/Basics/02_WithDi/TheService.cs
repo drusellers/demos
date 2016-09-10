@@ -7,13 +7,13 @@ namespace demo.ioc._02_WithDi
     {
         public void Work()
         {
-            
-        } 
+
+        }
     }
 
     public class TheController
     {
-        private TheService _theService;
+        TheService _theService;
 
         // Inversion of Control - who controls the 'creation'
         // Injecting the Dependency - type: Constructor
@@ -31,11 +31,12 @@ namespace demo.ioc._02_WithDi
 
 
         // DI via Property (optional)
-        private ILogger _logger;
+        ILogger _logger;
 
         public ILogger Logger
         {
             get { return _logger ?? new NullLogger(); }
+            set { _logger = value; }
         }
 
         // DI via Method

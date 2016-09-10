@@ -18,7 +18,7 @@ namespace demo.ioc._03_Manual
                     .ImplementedBy<Repository>()
                     .LifestyleSingleton(),
                 Component.For<SomeService>().ImplementedBy<SomeService>(),
-                Component.For<AnotherService>().ImplementedBy<AnotherService>(),
+                Component.For<IAnotherService>().ImplementedBy<AnotherService>(),
                 Component.For<ValidationService>().ImplementedBy<ValidationService>(),
                 Component.For<TheRealWorker>()
                     .ImplementedBy<TheRealWorker>()
@@ -27,7 +27,7 @@ namespace demo.ioc._03_Manual
 
             var w = container.Resolve<TheRealWorker>();
             var w2 = container.Resolve<TheRealWorker>();
-            
+
             Assert.That(w==w2, Is.True);
 
             Assert.That(w, Is.Not.Null);

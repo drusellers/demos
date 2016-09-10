@@ -4,7 +4,7 @@
     {
         public void Work()
         {
-            
+
         }
     }
 
@@ -70,13 +70,13 @@
 
     public class DatabaseSettings
     {
-        
+
     }
     public class Repository
     {
         public Repository(DatabaseSettings settings)
         {
-            
+
         }
     }
 
@@ -84,11 +84,15 @@
     {
         public SomeService(Repository repository)
         {
-            
+
         }
     }
 
-    public class AnotherService
+    public interface IAnotherService
+    {
+
+    }
+    public class AnotherService : IAnotherService
     {
         public AnotherService(Repository rep, ValidationService srv)
         {
@@ -98,7 +102,7 @@
 
     public class ValidationService
     {
-        
+
     }
 
     public class TheRealWorker
@@ -114,7 +118,7 @@
 
         public void Yo()
         {
-            
+
         }
     }
 
