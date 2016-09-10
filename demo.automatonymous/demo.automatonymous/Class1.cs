@@ -1,6 +1,7 @@
 ﻿using System;
 using Automatonymous;
 using Automatonymous.Binders;
+using Automatonymous.Events;
 using Automatonymous.Graphing;
 using NUnit.Framework;
 
@@ -13,11 +14,14 @@ namespace demo.auto
         {
             var theMachine = new OrderMachine();
             var theInstance = new OrderState();
-            theMachine.RaiseEvent(theInstance, theMachine.Greet);
+            theMachine.RaiseEvent(theInstance, theMachine.DetectedOrder, new OrderData
+            {
+                OrderId = 2
+            });
             Console.WriteLine(theInstance.CurrentState);
 
 
-            theMachine.RaiseEvent(theInstance, theMachine.Goodbye);
+            theMachine.RaiseEvent(theInstance, theMachine.Complete);
             Console.WriteLine(theInstance.CurrentState);
 
             var x = theMachine.GetGraph();
@@ -31,51 +35,59 @@ namespace demo.auto
             Id = Guid.NewGuid().ToString();
         }
 
-        public string Id { get; set; } 
-        public State CurrentState { get; set; }  
+        public string Id { get; set; }
+        public State CurrentState { get; set; }
     }
 
     public class OrderMachine : AutomatonymousStateMachine<OrderState>
     {
         public OrderMachine()
         {
-            InstanceState(x=>x.CurrentState);
+            InstanceState(x => x.CurrentState);
 
             // ReSharper disable DoNotCallOverridableMethodsInConstructor
-            Event(()=> Greet);
-            Event(()=> Goodbye);
+            Event(() => DetectedOrder);
+            Event(() => Complete);
 
-            State(()=>Greeted);
+            State(() => ReceiveOrder);
             // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
             Initially(
-                When(Greet)
-                .Then(x =>
-                {
-                    
-                    throw new Exception("BOB");
-                    Console.WriteLine("ID:" + x.Instance.Id);
-                    
-                })
-                .TransitionTo(Greeted)
-                .Catch<Exception>(OnError)
+                When(DetectedOrder)
+                    .Then(cxt =>
+                    {
+                        //throw new Exception("BOB");
+                        Console.WriteLine("ID:" + cxt.Data.OrderId);
+                    })
+                    .TransitionTo(ReceiveOrder)
+                    .Catch<Exception>(OnError)
                 );
 
-            During(Greeted, When(Goodbye)
+            During(ReceiveOrder, When(Complete)
                 .Finalize());
         }
 
-        private ExceptionActivityBinder<OrderState, Exception> OnError(ExceptionActivityBinder<OrderState, Exception> arg)
+        public Event<OrderData> DetectedOrder { get; set; }
+        public Event ReceiveUpdate { get; set; }
+
+        public Event Complete { get; set; }
+
+        public State ReceiveOrder { get; set; }
+        public State AtDropShipper { get; set; }
+        public State PartiallyReceived { get; set; }
+        public State FullyReceived { get; set; }
+        public State Cancelled { get; set; }
+        public State Errored { get; set; }
+
+        ExceptionActivityBinder<OrderState, OrderData, Exception> OnError(ExceptionActivityBinder<OrderState, OrderData, Exception> arg)
         {
             return arg
                 .TransitionTo(Errored);
         }
+    }
 
-        public Event Greet { get; set; }
-        public Event Goodbye { get; set; }
-
-        public State Greeted { get; set; }
-        public State Bill { get; set; }
-        public State Errored { get; set; }
+    public class OrderData
+    {
+        public int OrderId { get; set; }
     }
 }
