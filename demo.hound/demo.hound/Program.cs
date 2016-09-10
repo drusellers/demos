@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace demo.hound
 {
@@ -12,43 +14,53 @@ namespace demo.hound
     {
         static void Main(string[] args)
         {
-            var x = Microsoft.CodeAnalysis.CSharp.CSharpSyntaxTree.ParseText(@"
-public class Bob
-{
-    public string Name { get; set; }  
-    public string Bob { get; set; }
-}
-");
-            var bob = x.GetRoot().ChildNodes().First();
-            walk(0, bob);
+            var x = Microsoft.CodeAnalysis.CSharp.CSharpSyntaxTree.ParseText(File.ReadAllText("sample.txt"));
+            var root = x.GetRoot().ChildNodes().First();
+            new TrailingWhiteSpaceRule().Walk(root);
 
+            Console.WriteLine("Done");
             Console.ReadKey();
         }
 
-        private static void walk(int depth, SyntaxNodeOrToken node)
+
+    }
+
+    public class TrailingWhiteSpaceRule
+    {
+        public void Walk(SyntaxNodeOrToken root)
         {
-            trace(depth, node);
-            trace(depth, node.Kind());
+            var q = new Queue<SyntaxNodeOrToken>();
+
+            q.Enqueue(root);
+            while (q.Count > 0)
+            {
+                var current = q.Dequeue();
+                if (current == null)
+                    continue;
+
+                foreach (var child in current.ChildNodesAndTokens())
+                {
+                    q.Enqueue(child);
+                }
+
+                Check(current);
+            }
+        }
+
+        void Check(SyntaxNodeOrToken node)
+        {
             var trivia = node.GetTrailingTrivia();
-            foreach (var t in trivia)
+            for (int i = 0; i < trivia.Count; i++)
             {
-                //looking for white space trivia before the end of line trivia
-                trace(depth, string.Format("TRIVIA: {0}", t.Kind()));
-            }
-
-            foreach (var n in node.ChildNodesAndTokens())
-            {
-                walk(depth + 1, n);
+                var inspect = trivia[i];
+                if (inspect.IsKind(SyntaxKind.EndOfLineTrivia))
+                {
+                    if (i > 0 && trivia[i - 1].IsKind(SyntaxKind.WhitespaceTrivia))
+                    {
+                        Console.WriteLine($"Found whitespace at {node.GetLocation().GetLineSpan().EndLinePosition}");
+                    }
+                }
             }
         }
-
-        static void trace(int depth, object arg)
-        {
-            Console.WriteLine("{0}{1}",new string(' ',depth), arg);
-        }
-
-
-
-
     }
 }
