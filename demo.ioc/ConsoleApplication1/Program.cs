@@ -16,10 +16,10 @@ namespace ConsoleApplication1
             var app = AppContext.Build();
 
 
-            app.RunAsConsole();
-            app.RunAsService();
-            app.RunAsMessageQueuue();
-            app.RunAsWeb(); 
+//            app.RunAsConsole();
+//            app.RunAsService();
+//            app.RunAsMessageQueuue();
+//            app.RunAsWeb();
         }
     }
 
@@ -36,7 +36,7 @@ namespace ConsoleApplication1
         {
             var c = new WindsorContainer();
             return new AppContext(c);
-          
+
         }
     }
 }

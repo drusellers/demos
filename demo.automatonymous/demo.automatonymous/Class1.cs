@@ -49,7 +49,7 @@ namespace demo.auto
             Event(() => DetectedOrder);
             Event(() => Complete);
 
-            State(() => ReceiveOrder);
+            State(() => Unprocessed);
             // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
             Initially(
@@ -59,30 +59,30 @@ namespace demo.auto
                         //throw new Exception("BOB");
                         Console.WriteLine("ID:" + cxt.Data.OrderId);
                     })
-                    .TransitionTo(ReceiveOrder)
+                    .TransitionTo(Unprocessed)
                     .Catch<Exception>(OnError)
                 );
 
-            During(ReceiveOrder, When(Complete)
+            During(Unprocessed, When(Complete)
                 .Finalize());
         }
 
         public Event<OrderData> DetectedOrder { get; set; }
         public Event ReceiveUpdate { get; set; }
-
         public Event Complete { get; set; }
 
-        public State ReceiveOrder { get; set; }
+        //Implicit States are: `Initial` and `Complete?`
+        public State Unprocessed { get; set; }
         public State AtDropShipper { get; set; }
-        public State PartiallyReceived { get; set; }
-        public State FullyReceived { get; set; }
+        public State ShippedComplete { get; set; }
+        public State ProcessedIntoErp { get; set; }
         public State Cancelled { get; set; }
-        public State Errored { get; set; }
+        public State ErroredSending { get; set; }
 
         ExceptionActivityBinder<OrderState, OrderData, Exception> OnError(ExceptionActivityBinder<OrderState, OrderData, Exception> arg)
         {
             return arg
-                .TransitionTo(Errored);
+                .TransitionTo(ErroredSending);
         }
     }
 

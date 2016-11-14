@@ -62,6 +62,7 @@
     <Compile Include="Basics\04_Tooling\02_Installers.cs" />
     <Compile Include="Basics\04_Tooling\03_TypeScanning.cs" />
     <Compile Include="Basics\04_Tooling\04_Speed.cs" />
+    <Compile Include="Basics\04_Tooling\05_OptionalItems.cs" />
     <Compile Include="Basics\05_Modeling\AnInventoryController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

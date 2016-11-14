@@ -6,6 +6,7 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using demo.ioc._04_Tooling;
 using NUnit.Framework;
+using Component = Castle.MicroKernel.Registration.Component;
 
 namespace demo.ioc.Advanced._04_FeatureToggles
 {
@@ -36,7 +37,7 @@ namespace demo.ioc.Advanced._04_FeatureToggles
          * MEEP.Web
          * - an assembly that has MEEP.MssCustomizations
          * - an assembly that has MEEP.JpCustomizations
-         * - 
+         * -
          * */
 
 
@@ -52,6 +53,6 @@ namespace demo.ioc.Advanced._04_FeatureToggles
 
     public interface JPWebAssemblyMarker
     {
-        
+
     }
 }
