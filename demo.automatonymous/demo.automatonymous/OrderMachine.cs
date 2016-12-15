@@ -23,6 +23,7 @@ namespace demo.auto
                 When(ImportOrder)
                     .Then(cxt =>
                     {
+
                         // import the order into the database
                         // if no error transition to `Imported`
 
@@ -33,9 +34,16 @@ namespace demo.auto
                     .Catch<Exception>(OnError)
                 );
 
+            During(Imported, When(SendOut).Then(cxt =>
+            {
+                var x= cxt.Data.GetMyData;
+                // send to distributor
+            }).TransitionTo(Submitted));
+
+
             During(Submitted, When(ReceiveUpdate).Then(cxt =>
             {
-                // Shred the order
+                // Shred the shipment data
                 // Deliver updates to the correct line
                 // this is acting as a router to *its* children
             }));
@@ -56,6 +64,7 @@ namespace demo.auto
         }
 
         public Event ImportOrder { get; set; }
+        public Event<SomeData> SendOut { get; set; }
         public Event ReceiveUpdate { get; set; }
         public Event Complete { get; set; }
         public Event Cancel { get; set; }
@@ -75,5 +84,10 @@ namespace demo.auto
             return arg
                 .TransitionTo(ErroredImporting);
         }
+    }
+
+    public class SomeData
+    {
+        public string GetMyData { get; set; }
     }
 }
