@@ -108,9 +108,9 @@
     public class TheRealWorker
     {
         private readonly SomeService _ss;
-        private readonly AnotherService _asa;
+        private readonly IAnotherService _asa;
 
-        public TheRealWorker(SomeService ss, AnotherService asa)
+        public TheRealWorker(SomeService ss, IAnotherService asa)
         {
             _ss = ss;
             _asa = asa;

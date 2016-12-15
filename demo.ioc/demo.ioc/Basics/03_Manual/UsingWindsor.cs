@@ -1,6 +1,7 @@
 ﻿using Castle.MicroKernel.Handlers;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using Castle.Windsor.Configuration.Interpreters;
 using NUnit.Framework;
 
 namespace demo.ioc._03_Manual
@@ -28,7 +29,39 @@ namespace demo.ioc._03_Manual
             var w = container.Resolve<TheRealWorker>();
             var w2 = container.Resolve<TheRealWorker>();
 
-            Assert.That(w==w2, Is.True);
+            Assert.That(w==w2, Is.False);
+
+            Assert.That(w, Is.Not.Null);
+        }
+
+        [Test]
+        public void FromXml()
+        {
+            var container = new WindsorContainer(new XmlInterpreter("castle.xml"));
+
+            var w = container.Resolve<TheRealWorker>();
+            var w2 = container.Resolve<TheRealWorker>();
+
+            Assert.That(w == w2, Is.False);
+
+            Assert.That(w, Is.Not.Null);
+        }
+
+
+        [Test]
+        public void FromXmlAndCode()
+        {
+            var container = new WindsorContainer(new XmlInterpreter("castle.partial.xml"));
+            container.Register(
+                Component.For<TheRealWorker>()
+                    .ImplementedBy<TheRealWorker>()
+                    .LifestyleTransient()
+            );
+
+            var w = container.Resolve<TheRealWorker>();
+            var w2 = container.Resolve<TheRealWorker>();
+
+            Assert.That(w == w2, Is.False);
 
             Assert.That(w, Is.Not.Null);
         }
