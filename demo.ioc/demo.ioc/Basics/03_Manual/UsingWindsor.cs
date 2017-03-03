@@ -81,4 +81,34 @@ namespace demo.ioc._03_Manual
             Assert.That(()=>c.Resolve<TheRealWorker>(), Throws.InstanceOf<HandlerException>());
         }
     }
+
+    public class Weirdness
+    {
+        interface A
+        {
+
+        }
+
+        interface B : A
+        {
+
+        }
+
+        class Yo : B
+        {
+
+        }
+
+        [Test]
+        public void ABC()
+        {
+            var c = new WindsorContainer();
+            c.Register(Component.For<B>().ImplementedBy<Yo>());
+            var x = c.ResolveAll<A>();
+            var y = c.ResolveAll<B>();
+
+            Assert.That(x, Is.Empty);
+            Assert.That(y, Is.Not.Empty);
+        }
+    }
 }
